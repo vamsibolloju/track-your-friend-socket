@@ -43,6 +43,14 @@ io.on('connection', socket => {
         }
     })
 
+    socket.on('message', (data) => {
+        if(userSockets[data.friend_name]){
+            userSockets[data.friend_name].emit('message', { type: 'warning', message : data.message });
+        }else{
+            console.log(`no socket for ${data.friend_name} in message stream`);
+        }
+    });
+
     socket.on('disconnect', (reason) => {
         delete userSockets[socket.id];
         console.log( `Socket ${socket.id} is closed due to ${reason}`);
